@@ -1,3 +1,7 @@
+A Django-based classifieds platform where users can post, manage, and browse listings for properties 🏠, cars 🚗, and jobs 👷🏾‍♂️.
+Features include:
+
+User authentication with secure signup/login.
 
 Create, edit, delete, and toggle visibility for listings.
 
