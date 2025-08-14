@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quicklink Listings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+    <div class="container py-5">
+
+        {% if selected_category %}
+        <h3 class="mb-4">{{ selected_category }} - {{ selected_type }}</h3>
+        {% endif %}
+
+        {% if selected_category == "Property" or not selected_category %}
+        <h2 class="mb-4 mt-5"><i class="bi bi-house-door-fill"></i> Property Listings</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for property in properties %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    {% if property.image %}
+                    <img src="{{ property.image.url }}" class="card-img-top" alt="{{ property.title }}"
+                        style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ property.title }}</h5>
+                        <p class="card-text mb-2">
+                            <i class="bi bi-building"></i> <strong>Type:</strong> {{ property.property_type }}<br>
+                            <i class="bi bi-currency-dollar"></i> <strong>Price:</strong> ${{ property.price }}<br>
+                            <i class="bi bi-geo-alt-fill"></i> <strong>Location:</strong> {{ property.location }}
+                        </p>
+
+                        <p class="card-text text-muted small">{{ property.description|truncatewords:20 }}</p>
+                        <div class="mt-auto">
+                            <a href="{% url 'property_detail' property.pk %}"
+                                class="btn btn-primary btn-sm w-100 rounded-pill">View Property Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if selected_category == "Cars" or not selected_category %}
+        <h2 class="mb-4 mt-5"><i class="bi bi-car-front-fill"></i> Car Listings</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for car in cars %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    {% if car.image %}
+                    <img src="{{ car.image.url }}" class="card-img-top" alt="{{ car.make }} {{ car.model }}"
+                        style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ car.make }} {{ car.model }}</h5>
+                        <p class="card-text mb-2">
+                            <i class="bi bi-calendar"></i> <strong>Year:</strong> {{ car.year }}<br>
+                            <i class="bi bi-currency-dollar"></i> <strong>Price:</strong> ${{ car.price }}<br>
+                            <i class="bi bi-geo-alt-fill"></i> <strong>Location:</strong> {{ car.location }}
+                        </p>
+                        <p class="card-text text-muted small">
+                            <i class="bi bi-speedometer2"></i> Mileage: {{ car.mileage }} km
+                        </p>
+
+                        <div class="mt-auto">
+                            <a href="{% url 'car_detail' car.pk %}"
+                                class="btn btn-primary btn-sm w-100 rounded-pill">View
+                                Car Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+
+        {% if selected_category == "Jobs" or not selected_category %}
+        <h2 class="mb-4 mt-5"><i class="bi bi-briefcase-fill"></i> Job Listings</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for job in jobs %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    {% if job.image %}
+                    <img src="{{ job.image.url }}" class="card-img-top" alt="{{ job.title }}"
+                        style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ job.title }}</h5>
+                        <p class="card-text mb-2">
+                            <i class="bi bi-building"></i> <strong>Company:</strong> {{ job.company_name }}<br>
+                            <i class="bi bi-geo-alt-fill"></i> <strong>Location:</strong> {{ job.location }}<br>
+                            <i class="bi bi-currency-dollar"></i> <strong>Salary:</strong> ${{ job.salary }}
+                        </p>
+
+                        <p class="card-text text-muted small">{{ job.description|truncatewords:20 }}</p>
+                        <div class="mt-auto">
+                            <a href="{% url 'job_detail' job.pk %}"
+                                class="btn btn-primary btn-sm w-100 rounded-pill">View Job Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+
+    </div>
+</body>
+
+</html>

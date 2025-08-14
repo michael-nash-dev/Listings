@@ -1,2 +1,2 @@
-# Listings
- 
+# quicklink-classifieds
+Quicklink classifieds platform

@@ -1,0 +1,114 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Browse Cars</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container my-5">
+    <h2 class="mb-4 text-center">Browse Cars</h2>
+
+    <!-- Optional Search Form -->
+    <form method="get" action="{% url 'car_list' %}" class="row g-3 p-4 bg-white rounded shadow-sm">
+      <input type="text" name="q" class="form-control" placeholder="Search cars...try BMW under $10k in Harare" value="{{ query|default_if_none:'' }}">
+
+      
+      <div class="col-md-3">
+        <label class="form-label">Make</label>
+        <select name="category" class="form-select">
+          <option value="">All</option>
+          <option value="toyota" {% if filters.category == 'toyota' %}selected{% endif %}>Toyota</option>
+          <option value="bmw" {% if filters.category == 'bmw' %}selected{% endif %}>BMW</option>
+          <option value="mercedes-benz" {% if filters.category == 'mercedes-benz' %}selected{% endif %}>Mercedes-Benz</option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Model</label>
+        <input type="text" name="model" class="form-control" value="{{ filters.model }}">
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Price Range</label>
+        <div class="d-flex gap-2">
+          <input type="number" name="min_price" class="form-control" placeholder="Min" value="{{ filters.min_price }}">
+          <input type="number" name="max_price" class="form-control" placeholder="Max" value="{{ filters.max_price }}">
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label">Status</label>
+        <select name="status" class="form-select">
+          <option value="">All</option>
+          <option value="pending" {% if filters.status == 'pending' %}selected{% endif %}>Pending</option>
+          <option value="approved" {% if filters.status == 'approved' %}selected{% endif %}>Approved</option>
+          <option value="rejected" {% if filters.status == 'rejected' %}selected{% endif %}>Rejected</option>
+        </select>
+      </div>
+
+      <div class="col-md-1">
+        <label class="form-label">Active</label>
+        <select name="is_active" class="form-select">
+          <option value="">All</option>
+          <option value="true" {% if filters.is_active == 'true' %}selected{% endif %}>Yes</option>
+          <option value="false" {% if filters.is_active == 'false' %}selected{% endif %}>No</option>
+        </select>
+      </div>
+
+      <div class="col-md-12 text-end">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </form>
+
+    <!-- Car Listings -->
+    <div class="mt-5">
+      {% if cars %}
+        <div class="row">
+          {% for car in cars %}
+            <div class="col-md-4 mb-4">
+              <div class="card h-100 shadow-sm">
+                {% if car.image %}
+                  <img src="{{ car.image.url }}" class="card-img-top" alt="{{ car.title }}">
+                {% else %}
+                  <img src="{% static 'images/default-car.jpg' %}" class="card-img-top" alt="No Image">
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <a href="{% url 'car_detail' car.pk %}" class="text-decoration-none text-dark">
+                      {{ car.make }} {{ car.model }}
+                    </a>
+                  </h5>
+                  <p class="card-text">
+                    <strong>Price:</strong> ${{ car.price }}<br>
+                    <strong>Location:</strong> {{ car.location }}<br>
+                    <strong>Status:</strong> {{ car.status|title }}<br>
+                    <strong>Active:</strong> {{ car.is_active|yesno:"Yes,No" }}<br>
+                    <strong>Views:</strong> {{ car.views }}
+                    <a href="{% url 'car_detail' car.pk %}"
+                                class="btn btn-primary btn-sm w-100 rounded-pill">View Car Details</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="alert alert-info text-center">No cars found. Try a different search or filter.</div>
+      {% endif %}
+    </div>
+
+    <div class="text-center mt-4">
+      <a href="/" class="btn btn-outline-secondary">🔙 Back to Home</a>
+    </div>
+  </div>
+</body>
+</html>

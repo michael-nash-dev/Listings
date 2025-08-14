@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5 text-center">
+  <h2>What do you want to post?</h2>
+  <div class="mt-4">
+    <a href="{% url 'upload-listing' %}?type=property" class="btn btn-outline-success me-3">Property 🏠</a>
+    <a href="{% url 'upload-listing' %}?type=car" class="btn btn-outline-primary me-3">Car 🚗</a>
+    <a href="{% url 'upload-listing' %}?type=job" class="btn btn-outline-warning">Job 👷🏾‍♂️</a>
+  </div>
+</div>
+{% endblock %}

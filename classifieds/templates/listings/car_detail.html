@@ -1,0 +1,148 @@
+<h2 class="mb-4">Car Details</h2>
+<a href="{% url 'car_list' %}" class="btn btn-primary">Back to Cars</a><br>
+<br>
+<table class="table table-bordered table-striped table-hover">
+  <tbody>
+    <tr>
+      <th scope="row">Make</th>
+      <td>{{ car.make }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Model</th>
+      <td>{{ car.model }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Year</th>
+      <td>{{ car.year }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Category</th>
+      <td>{{ car.get_category_display }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Mileage</th>
+      <td>{{ car.mileage }} km</td>
+    </tr>
+    <tr>
+      <th scope="row">Price</th>
+      <td>$ {{ car.price }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Location</th>
+      <td>{{ car.location }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Contact</th>
+      <td>{{ car.contact_number }}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!-- Load Bootstrap 5 CSS and JS if not already included in base.html -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Car Image Carousel -->
+{% if car.pictures.exists %}
+  <div id="carImageCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      {% for pic in car.pictures.all %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <img src="{{ pic.image.url }}" class="d-block w-100" alt="Car Image"
+               style="max-height: 400px; object-fit: cover; border-radius: 8px;">
+        </div>
+      {% endfor %}
+
+    </div>
+
+    {% if car.pictures.count > 1 %}
+      <!-- Controls (only if more than 1 image) -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#carImageCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carImageCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      </button>
+    {% endif %}
+  </div>
+{% else %}
+  <p>No images available.</p>
+{% endif %}
+
+
+<form action="{% url 'contact_car_seller' car.id %}" method="POST" class="needs-validation" novalidate>
+  {% csrf_token %}
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Contact the Advertiser</h5>
+    </div>
+    <div class="card-body p-4">
+      <div class="mb-4">
+        <label for="email" class="form-label fw-semibold">Your Email Address</label>
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="bi bi-envelope"></i>
+          </span>
+          <input type="email" name="email" class="form-control py-2" placeholder="name@example.com" required>
+        </div>
+        <div class="invalid-feedback">
+          Please provide a valid email address.
+        </div>
+      </div>
+      
+      <div class="mb-4">
+        <label for="message" class="form-label fw-semibold">Your Message</label>
+        <textarea name="message" class="form-control py-2" rows="5" placeholder="Write your message here..." required></textarea>
+        <div class="invalid-feedback">
+          Please write your message.
+        </div>
+        
+      </div>
+    </div>
+    <div class="card-footer bg-light border-0 py-3">
+      <button type="submit" class="btn btn-primary px-4 py-2">
+        <i class="bi bi-send me-2"></i> Send Message
+      </button>
+      <button type="reset" class="btn btn-outline-secondary ms-2 px-4 py-2">
+        <i class="bi bi-eraser me-2"></i> Clear
+      </button>
+    </div>
+  </div>
+</form>
+
+<style>
+  .form-control, .input-group-text {
+    border-radius: 0.25rem;
+  }
+  .form-control:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  }
+  .card {
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  // Bootstrap validation script
+  (function() {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
+  })()
+</script>
+
+
+
+

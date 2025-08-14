@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<!-- Search Bar -->
+<div class="container mt-5 mb-4">
+  <div class="p-4 bg-white shadow-sm rounded">
+    <form method="get" action="{% url 'listings' %}" class="d-flex" role="search">
+      <input class="form-control me-2" type="search" name="q" placeholder="Search listings..." aria-label="Search">
+      <button class="btn btn-success" type="submit">Search</button>
+    </form>
+  </div>
+</div>
+
+
+{% if search_query %}
+  <h5 class="text-muted">Search results for: "{{ search_query }}"</h5>
+{% endif %}
+
+<!-- Categories -->
+<div class="container py-5">
+  <div class="row g-4">
+    {% for cat in categories %}
+      <div class="col-md-4">
+        <div class="category-box">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <i class="bi {{ cat.icon }} category-icon"></i>
+              <strong>{{ cat.name }}</strong>
+            </div>
+            <span class="text-muted">({{ cat.count }})</span>
+          </div>
+          <div>
+            {% for sub in cat.subcategories|slice:":5" %}
+              <a href="{% url 'listings' %}?category={{ cat.name|urlencode }}&type={{ sub|urlencode }}" class="subcategory-link">
+                {{ sub }}
+              </a>
+            {% endfor %}
+            {% if cat.subcategories|length > 5 %}
+              <a href="#" class="subcategory-link text-muted">More <i class="bi bi-chevron-down"></i></a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+
+{% endblock %}
+
+ 

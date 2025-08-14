@@ -1,0 +1,51 @@
+.advert-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.advert-categories a {
+    background: #f0f0f0;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #333;
+    text-decoration: none;
+}
+
+.advert-categories a:hover {
+    background: #e0e0e0;
+}
+
+.advert-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    position: relative;
+}
+
+.advert-category-badge {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    background: #e0e0e0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.7em;
+}
+
+.advert-title {
+    display: block;
+    margin-right: 70px;
+}
+
+.advert-price {
+    color: #2a9d8f;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.advert-date {
+    color: #666;
+    font-size: 0.8em;
+}

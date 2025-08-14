@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Browse Properties</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container my-5">
+    <h2 class="mb-4 text-center">Browse Properties</h2>
+
+    <!-- Filter Form -->
+    <form method="get" class="row g-3 p-4 bg-white rounded shadow-sm">
+      <div class="col-12">
+        <input type="text" name="q" class="form-control" placeholder="Search property here try: $500k house in Borrowdale" value="{{ query|default_if_none:'' }}">
+      </div>
+
+      <div class="col-md-3">
+        <label for="category" class="form-label">Category</label>
+        <select name="category" class="form-select" id="category">
+          <option value="">All</option>
+          <option value="sale" {% if filters.category == 'sale' %}selected{% endif %}>Houses for Sale</option>
+          <option value="rent" {% if filters.category == 'rent' %}selected{% endif %}>Houses to Rent</option>
+          <option value="land" {% if filters.category == 'land' %}selected{% endif %}>Land for Sale</option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <label for="status" class="form-label">Status</label>
+        <select name="status" class="form-select" id="status">
+          <option value="">All</option>
+          <option value="pending" {% if filters.status == 'pending' %}selected{% endif %}>Pending</option>
+          <option value="approved" {% if filters.status == 'approved' %}selected{% endif %}>Approved</option>
+          <option value="rejected" {% if filters.status == 'rejected' %}selected{% endif %}>Rejected</option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Price Range</label>
+        <div class="d-flex gap-2">
+          <input type="number" name="min_price" class="form-control" placeholder="Min" value="{{ filters.min_price }}">
+          <input type="number" name="max_price" class="form-control" placeholder="Max" value="{{ filters.max_price }}">
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <label for="is_active" class="form-label">Active</label>
+        <select name="is_active" class="form-select" id="is_active">
+          <option value="">All</option>
+          <option value="true" {% if filters.is_active == 'true' %}selected{% endif %}>Active</option>
+          <option value="false" {% if filters.is_active == 'false' %}selected{% endif %}>Inactive</option>
+        </select>
+      </div>
+
+      <div class="col-md-1 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Search</button>
+      </div>
+    </form>
+
+    <!-- Listings -->
+    <div class="mt-5">
+      {% if properties %}
+        <div class="row">
+          {% for property in properties %}
+            <div class="col-md-4 mb-4">
+              <div class="card h-100 shadow-sm">
+                {% if property.image %}
+                  <img src="{{ property.image.url }}" class="card-img-top" alt="{{ property.title }}">
+                {% else %}
+                  <img src="{% static 'images/default-property.jpg' %}" class="card-img-top" alt="No Image">
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <a href="{% url 'property_detail' property.pk %}" class="text-decoration-none text-dark">
+                      {{ property.title }}
+                    </a>
+                  </h5>
+                  <p class="card-text mb-1"><strong>Category:</strong> {{ property.get_category_display }}</p>
+                  <p class="card-text mb-1"><strong>Price:</strong> ${{ property.price }}</p>
+                  <p class="card-text mb-1"><strong>Location:</strong> {{ property.location }}</p>
+                  <p class="card-text mb-1"><strong>Status:</strong> {{ property.status|title }}</p>
+                  <p class="card-text mb-1"><strong>Active:</strong> {{ property.is_active|yesno:"Yes,No" }}</p>
+                  <p class="card-text mb-0"><strong>Views:</strong> {{ property.views }}</p>
+                  <a href="{% url 'property_detail' property.pk %}"
+                                class="btn btn-primary btn-sm w-100 rounded-pill">View Property Details</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="alert alert-info text-center">
+          No properties found. Try adjusting your filters.
+        </div>
+      {% endif %}
+    </div>
+    <div class="text-center mt-4">
+      <a href="/" class="btn btn-outline-secondary">🔙 Back to Home</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

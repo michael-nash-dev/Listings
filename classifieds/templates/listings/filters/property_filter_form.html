@@ -1,0 +1,37 @@
+<form method="get" class="filter-form">
+  <label>Category:
+    <select name="category">
+      <option value="">All</option>
+      {% for key, label in PROPERTY_CATEGORIES %}
+        <option value="{{ key }}">{{ label }}</option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <label>Status:
+    <select name="status">
+      <option value="">Any</option>
+      <option value="pending">Pending</option>
+      <option value="approved">Approved</option>
+      <option value="rejected">Rejected</option>
+    </select>
+  </label>
+
+  <label>Min Price:
+    <input type="number" name="min_price">
+  </label>
+
+  <label>Max Price:
+    <input type="number" name="max_price">
+  </label>
+
+  <label>Active:
+    <select name="is_active">
+      <option value="">Any</option>
+      <option value="true">Active</option>
+      <option value="false">Inactive</option>
+    </select>
+  </label>
+
+  <button type="submit">Apply Filters</button>
+</form>

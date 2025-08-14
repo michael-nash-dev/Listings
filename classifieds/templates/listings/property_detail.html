@@ -1,0 +1,133 @@
+<h2 class="mb-4">Property Details</h2>
+<a href="{% url 'property_list' %}" class="btn btn-primary">Back to Properties</a><br>
+<br>
+
+<p>Description:{{property.description}}</p>
+<table class="table table-bordered table-striped table-hover">
+  <tbody>
+    <tr>
+      <tr>
+      <th scope="row">Category</th>
+      <td>{{ property.get_category_display }}</td>
+    </tr>
+      <th scope="row">Price</th>
+      <td>{{ property.price }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Location</th>
+      <td>{{ property.location }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Surbub</th>
+      <td>{{ property.surbub }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Contact</th>
+      <td>{{ property.contact_number }}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!-- Bootstrap 5 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Bootstrap Bundle JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+<!-- Bootstrap Carousel for Property Images -->
+{% if property.pictures.all %}
+<div id="propertyImageCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    {% for pic in property.pictures.all %}
+    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+      <img src="{{ pic.image.url }}" class="d-block w-100" alt="Property Image"
+        style="max-height: 400px; object-fit: cover; border-radius: 8px;">
+    </div>
+    {% endfor %}
+  </div>
+
+  <button class="carousel-control-prev" type="button" data-bs-target="#propertyImageCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#propertyImageCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+  </button>
+</div>
+{% else %}
+<p>No pictures available.</p>
+{% endif %}
+
+<form action="{% url 'contact_seller' property.id %}" method="POST" class="needs-validation" novalidate>
+  {% csrf_token %}
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Contact the Advertiser</h5>
+    </div>
+    <div class="card-body p-4">
+      <div class="mb-4">
+        <label for="email" class="form-label fw-semibold">Your Email Address</label>
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="bi bi-envelope"></i>
+          </span>
+          <input type="email" name="email" class="form-control py-2" placeholder="name@example.com" required>
+        </div>
+        <div class="invalid-feedback">
+          Please provide a valid email address.
+        </div>
+      </div>
+      
+      <div class="mb-4">
+        <label for="message" class="form-label fw-semibold">Your Message</label>
+        <textarea name="message" class="form-control py-2" rows="5" placeholder="Write your message here..." required></textarea>
+        <div class="invalid-feedback">
+          Please write your message.
+        </div>
+        
+      </div>
+    </div>
+    <div class="card-footer bg-light border-0 py-3">
+      <button type="submit" class="btn btn-primary px-4 py-2">
+        <i class="bi bi-send me-2"></i> Send Message
+      </button>
+      <button type="reset" class="btn btn-outline-secondary ms-2 px-4 py-2">
+        <i class="bi bi-eraser me-2"></i> Clear
+      </button>
+    </div>
+  </div>
+</form>
+
+<style>
+  .form-control, .input-group-text {
+    border-radius: 0.25rem;
+  }
+  .form-control:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  }
+  .card {
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  // Bootstrap validation script
+  (function() {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
+  })()
+</script>
